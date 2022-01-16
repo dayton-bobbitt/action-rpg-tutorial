@@ -36,7 +36,7 @@ func _ready():
 	_animation_tree.active = true
 
 
-func _physics_process(_delta):
+func _process(_delta):
 	var direction = _get_direction()
 	var is_moving = direction != Vector2.ZERO
 	var is_attacking = _get_is_attacking()
