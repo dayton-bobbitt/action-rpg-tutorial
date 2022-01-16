@@ -395,7 +395,6 @@ shape = SubResource( 30 )
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 40 )
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/playback = SubResource( 41 )
 parameters/Attack/blend_position = Vector2( 0, 0 )
 parameters/Idle/blend_position = Vector2( 0, 0 )
