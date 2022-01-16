@@ -8,7 +8,7 @@ const ANIMATION = {
 onready var _animation_player = $AnimationPlayer
 
 
-func _on_Hurtbox_area_entered(area):
+func _on_Hurtbox_area_entered(_area):
 	_animation_player.play(ANIMATION.DEATH)
 
 
