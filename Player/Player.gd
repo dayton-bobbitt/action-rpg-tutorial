@@ -26,6 +26,7 @@ const DEFAULT_FRICTION: int = 15
 const ATTACK_FRICTION: int = 5
 
 var _state = State.IDLE
+var _direction = Vector2.ZERO
 var _velocity = Vector2.ZERO
 
 onready var _animation_tree = $AnimationTree
@@ -36,30 +37,32 @@ func _ready():
 	_animation_tree.active = true
 
 
-func _process(_delta):
-	var direction = _get_direction()
-	var is_moving = direction != Vector2.ZERO
+func _process(delta) -> void:
+	_update_direction()
+	
+	var is_moving = _direction != Vector2.ZERO
 	var is_attacking = _get_is_attacking()
 	
 	_update_state(is_attacking, is_moving)
-	
+
+
+func _physics_process(_delta) -> void:
 	match _state:
 		State.IDLE:
 			_player_idle()
 		State.MOVE:
-			_player_move(direction)
+			_player_move(_direction)
 		State.ATTACK:
 			_player_attack()
 
 
-# Returns a normalized vector based on player input
-func _get_direction() -> Vector2:
+func _update_direction() -> void:
 	var direction = Vector2.ZERO
 	
 	direction.x = Input.get_action_strength(INPUT.RIGHT) - Input.get_action_strength(INPUT.LEFT)
 	direction.y = Input.get_action_strength(INPUT.DOWN) - Input.get_action_strength(INPUT.UP)
 	
-	return direction.normalized()
+	_direction = direction.normalized()
 
 
 func _get_is_attacking() -> bool:
