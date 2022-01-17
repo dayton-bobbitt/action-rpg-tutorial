@@ -8,6 +8,22 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Area2D",
+"class": "Hitbox",
+"language": "GDScript",
+"path": "res://Collisions/Hitbox.gd"
+}, {
+"base": "Area2D",
+"class": "Hurtbox",
+"language": "GDScript",
+"path": "res://Collisions/Hurtbox.gd"
+} ]
+_global_script_class_icons={
+"Hitbox": "",
+"Hurtbox": ""
+}
+
 [application]
 
 config/name="Action RPG Tutorial"
