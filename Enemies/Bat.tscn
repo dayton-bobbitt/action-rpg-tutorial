@@ -235,7 +235,7 @@ texture = ExtResource( 2 )
 
 [node name="DeathEffectSprite" type="Sprite" parent="."]
 visible = false
-position = Vector2( 0, -4 )
+position = Vector2( 0, -15 )
 scale = Vector2( 0.7, 0.7 )
 texture = ExtResource( 3 )
 hframes = 10
