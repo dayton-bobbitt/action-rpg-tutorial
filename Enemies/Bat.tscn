@@ -219,6 +219,7 @@ tracks/1/keys = {
 }
 
 [node name="Bat" type="StaticBody2D"]
+collision_layer = 16
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true
