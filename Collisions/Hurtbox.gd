@@ -2,6 +2,7 @@ class_name Hurtbox
 extends Area2D
 
 
+signal hit(knockback)
 signal destroyed
 
 
@@ -17,7 +18,12 @@ func _ready():
 func _take_damage(hitbox: Hitbox) -> void:
 	_health -= hitbox.attack_strength
 	
-	if _health <= 0:
+	if _health > 0:
+		var attack_direction = hitbox.get_parent().global_position.direction_to(global_position)
+		var knockback = attack_direction * hitbox.knockback_strength
+		
+		emit_signal("hit", knockback)
+	else:
 		emit_signal("destroyed")
 
 
