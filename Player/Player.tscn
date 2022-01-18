@@ -1,9 +1,11 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://Player/Player.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Collisions/Hitbox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Collisions/Hurtbox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Shadows/SmallShadow.png" type="Texture" id=5]
+[ext_resource path="res://Effects/HitEffect.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CapsuleShape2D" id=30]
 radius = 4.0
@@ -778,6 +780,10 @@ tracks/2/keys = {
 [sub_resource type="CapsuleShape2D" id=67]
 height = 8.0
 
+[sub_resource type="CapsuleShape2D" id=79]
+radius = 4.0
+height = 2.0
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 script = ExtResource( 2 )
@@ -833,15 +839,28 @@ position = Vector2( 0, -5 )
 position = Vector2( 15, 0 )
 collision_layer = 0
 collision_mask = 8
-attack_strength = 10.0
+attack_strength = 3.0
 knockback_strength = 200.0
 
 [node name="CollisionShape2D" parent="HitboxPivot/Hitbox" index="0"]
 shape = SubResource( 67 )
 disabled = true
 
+[node name="Hurtbox" parent="." instance=ExtResource( 4 )]
+max_health = 10.0
+HitEffect = ExtResource( 6 )
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2( -1, 0 )
+rotation = 1.5708
+shape = SubResource( 79 )
+
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 wait_time = 0.7
 one_shot = true
 
+[connection signal="destroyed" from="Hurtbox" to="." method="_on_Hurtbox_destroyed"]
+[connection signal="hit" from="Hurtbox" to="." method="_on_Hurtbox_hit"]
+
 [editable path="HitboxPivot/Hitbox"]
+[editable path="Hurtbox"]

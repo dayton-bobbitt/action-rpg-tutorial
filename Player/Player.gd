@@ -1,3 +1,4 @@
+class_name Player
 extends KinematicBody2D
 
 
@@ -155,3 +156,11 @@ func _roll_animation_finished() -> void:
 
 func _attack_animation_finished() -> void:
 	_state = State.IDLE
+
+
+func _on_Hurtbox_destroyed():
+	print("PLAYER DIED")
+
+
+func _on_Hurtbox_hit(knockback):
+	print("PLAYER HIT")
