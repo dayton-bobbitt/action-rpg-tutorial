@@ -27,6 +27,7 @@ var _velocity = Vector2.ZERO
 var _knockback_velocity = Vector2.ZERO
 var _player: Player
 
+onready var _sprite = $BatSprite
 onready var _animation_player = $AnimationPlayer
 onready var _attack_cooldown_timer = $AttackCooldownTimer
 
@@ -99,7 +100,9 @@ func _attack_state() -> void:
 func _move(max_speed := CHASE_MAX_SPEED, acceleration := CHASE_ACCELERATION) -> void:
 	var direction = global_position.direction_to(_player.global_position)
 	var new_velocity = _velocity.move_toward(direction * max_speed, acceleration)
+	
 	_velocity = move_and_slide(new_velocity)
+	_sprite.flip_h = _velocity.x < 0
 
 
 func _on_AnimationPlayer_animation_finished(anim_name: String):
