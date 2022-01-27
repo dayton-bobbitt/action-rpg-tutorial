@@ -159,8 +159,8 @@ func _attack_animation_finished() -> void:
 
 
 func _on_Hurtbox_destroyed():
-	print("PLAYER DIED")
+	self.queue_free()
 
 
 func _on_Hurtbox_hit(knockback):
-	print("PLAYER HIT")
+	print("Ow...")

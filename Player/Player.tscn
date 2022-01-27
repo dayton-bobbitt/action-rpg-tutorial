@@ -781,7 +781,7 @@ tracks/2/keys = {
 height = 8.0
 
 [sub_resource type="CapsuleShape2D" id=79]
-radius = 4.0
+radius = 5.0
 height = 2.0
 
 [node name="Player" type="KinematicBody2D"]
@@ -847,12 +847,13 @@ shape = SubResource( 67 )
 disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
+collision_layer = 4
+collision_mask = 0
 max_health = 10.0
 HitEffect = ExtResource( 6 )
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
-position = Vector2( -1, 0 )
-rotation = 1.5708
+position = Vector2( 0, -4 )
 shape = SubResource( 79 )
 
 [node name="AttackCooldownTimer" type="Timer" parent="."]
