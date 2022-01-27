@@ -848,9 +848,9 @@ disabled = true
 
 [node name="Hurtbox" parent="." instance=ExtResource( 4 )]
 collision_layer = 4
-collision_mask = 0
 max_health = 10.0
 HitEffect = ExtResource( 6 )
+invincibility_secs_on_hit = 0.5
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 position = Vector2( 0, -4 )
