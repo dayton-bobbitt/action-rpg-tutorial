@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player/Player.gd"
+}, {
+"base": "Area2D",
+"class": "SoftCollision",
+"language": "GDScript",
+"path": "res://Collisions/SoftCollision.gd"
 } ]
 _global_script_class_icons={
 "Hitbox": "",
 "Hurtbox": "",
-"Player": ""
+"Player": "",
+"SoftCollision": ""
 }
 
 [application]
@@ -117,6 +123,7 @@ ui_roll={
 2d_physics/layer_3="PlayerHurtbox"
 2d_physics/layer_4="EnemyHurtbox"
 2d_physics/layer_5="Enemy"
+2d_physics/layer_6="SoftCollisions"
 
 [physics]
 

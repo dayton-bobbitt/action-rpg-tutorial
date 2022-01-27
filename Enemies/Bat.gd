@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 
 enum State {
+	AVOID,
 	IDLE,
 	CHASE,
 	ATTACK,
@@ -13,8 +14,10 @@ const ANIMATION = {
 	DEATH = "death"
 }
 
+const AVOID_MAX_SPEED: int = 40
 const CHASE_MAX_SPEED: int = 40
 const ATTACK_MAX_SPEED: int = 80
+const AVOID_ACCELERATION: int = 20
 const CHASE_ACCELERATION: int = 15
 const ATTACK_ACCELERATION: int = 25
 const FRICTION: int = 12
@@ -22,9 +25,10 @@ const KNOCKBACK_RESISTANCE: int = 12
 const ATTACK_DISTANCE: int = 25
 const ATTACK_RECOIL: int = 150
 
-var _state = State.IDLE
+var _state = State.IDLE setget _set_state
 var _velocity = Vector2.ZERO
 var _knockback_velocity = Vector2.ZERO
+var _avoid_direction = Vector2.ZERO
 var _player: Player
 
 onready var _sprite = $BatSprite
@@ -53,6 +57,8 @@ func _physics_process(_delta):
 				_chase_state()
 			State.ATTACK:
 				_attack_state()
+			State.AVOID:
+				_avoid_state()
 
 
 func _has_knockback() -> bool:
@@ -60,6 +66,10 @@ func _has_knockback() -> bool:
 
 
 func _update_state() -> void:
+	if _state == State.AVOID:
+		# avoid until you can't avoid no more
+		return
+		
 	if not _attack_cooldown_timer.is_stopped():
 		# bat just attacked and is temporarily idle
 		_state = State.IDLE
@@ -69,6 +79,12 @@ func _update_state() -> void:
 		_state = State.CHASE
 	else:
 		_state = State.IDLE
+
+
+func _set_state(value) -> void:
+	# only update state if not already dead
+	if _state != State.DEAD:
+		_state = value
 
 
 func _is_chasing() -> bool:
@@ -90,15 +106,22 @@ func _idle_state() -> void:
 
 
 func _chase_state() -> void:
-	_move()
+	_move(_get_direction_of_player())
 
 
 func _attack_state() -> void:
-	_move(ATTACK_MAX_SPEED, ATTACK_ACCELERATION)
+	_move(_get_direction_of_player(), ATTACK_MAX_SPEED, ATTACK_ACCELERATION)
 
 
-func _move(max_speed := CHASE_MAX_SPEED, acceleration := CHASE_ACCELERATION) -> void:
-	var direction = global_position.direction_to(_player.global_position)
+func _avoid_state() -> void:
+	_move(_avoid_direction, AVOID_MAX_SPEED, AVOID_ACCELERATION)
+
+
+func _get_direction_of_player() -> Vector2:
+	return global_position.direction_to(_player.global_position)
+
+
+func _move(direction: Vector2, max_speed := CHASE_MAX_SPEED, acceleration := CHASE_ACCELERATION) -> void:
 	var new_velocity = _velocity.move_toward(direction * max_speed, acceleration)
 	
 	_velocity = move_and_slide(new_velocity)
@@ -116,7 +139,7 @@ func _on_Hurtbox_hit(knockback: Vector2):
 
 
 func _on_Hurtbox_destroyed():
-	_state = State.DEAD
+	self._state = State.DEAD
 	_animation_player.play(ANIMATION.DEATH)
 
 
@@ -133,3 +156,12 @@ func _on_player_hit(area):
 	_knockback_velocity = attack_knockback_direction * ATTACK_RECOIL
 	
 	_attack_cooldown_timer.start()
+
+
+func _on_SoftCollision_soft_collision(avoid_direction: Vector2):
+	self._state = State.AVOID
+	_avoid_direction = avoid_direction
+
+
+func _on_SoftCollision_collision_avoided():
+	self._state = State.IDLE
